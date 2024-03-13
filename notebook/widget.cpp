@@ -7,17 +7,65 @@ Widget::Widget(QWidget *parent):QWidget(parent), ui(new Ui::Widget)
     ui->setupUi(this);
     this->setLayout(ui->verticalLayout);
     ui->widgetBottom->setLayout(ui->horizontalLayout);
+    //快捷键
+    QShortcut *shortCutSave = new QShortcut(QKeySequence(tr("Ctrl+S", "File|Open")), this);
+    QShortcut *shortCutOpen = new QShortcut(QKeySequence(tr("Ctrl+O", "File|Save")), this);
+    QShortcut *shortCutZoomIn = new QShortcut(QKeySequence(tr("Ctrl+Shift+=", "File|ZoomIn")), this);
+    QShortcut *shortCutZoomOut = new QShortcut(QKeySequence(tr("Ctrl+Shift+-", "File|ZoomOut")), this);
+    connect(shortCutSave, &QShortcut::activated, [=](){//connet绑定槽函数lamda表达式写法
+        btnSave_clicked();
+    });
+    connect(shortCutOpen, &QShortcut::activated, [=](){
+        btnOpen_clicked();
+    });
+    connect(shortCutZoomIn, &QShortcut::activated, [=](){
+        //内置函数
+        //ui->textEdit->zoomIn();
+        //手动实现
+        QFont font = ui->textEdit->font();
+        font.setPointSize(font.pointSize()+1);
+        ui->textEdit->setFont(font);
+    });
+    connect(shortCutZoomOut, &QShortcut::activated, [=](){
+        //内置函数
+        //ui->textEdit->zoomOut();
+        //手动实现
+        QFont font = ui->textEdit->font();
+        if(font.pointSize() <= 0)return;
+        font.setPointSize(font.pointSize()-1);
+        ui->textEdit->setFont(font);
+    });
     QObject::connect(ui->btnOpen, SIGNAL(clicked()), this, SLOT(btnOpen_clicked()));
     QObject::connect(ui->btnSave, SIGNAL(clicked()), this, SLOT(btnSave_clicked()));
     QObject::connect(ui->btnClose, SIGNAL(clicked()), this, SLOT(btnClose_clicked()));
     QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(onCurrentIndexChanged(int)));
     QObject::connect(ui->textEdit, SIGNAL(cursorPositionChanged()), this, SLOT(oncursorPositionChanged()));
     QObject::connect(this, SIGNAL(mysignal(int)), this, SLOT(myslot(int)));
+
+    //QObject::connect(ui->Mybnt, SIGNAL(clicked()), this, SLOT(Mybtn_clicked()));//自定义按键绑定信号与槽函数
 }
 
 Widget::~Widget()
 {
     delete ui;
+}
+
+void Widget::closeEvent(QCloseEvent *event)
+{
+    QMessageBox leaveBox;
+    leaveBox.setText("Are you sure close the notebook?");
+    leaveBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    leaveBox.setDefaultButton(QMessageBox::No);
+    switch(leaveBox.exec()){
+    case QMessageBox::Yes:
+        event->accept();
+        break;
+    case QMessageBox::No:
+        event->ignore();
+        break;
+    default:
+        break;
+    }
 }
 
 void Widget::btnOpen_clicked()
@@ -135,8 +183,14 @@ void Widget::oncursorPositionChanged()
     ui->textEdit->setExtraSelections(extraSelection);
 }
 
+
 void Widget::myslot(int value)
 {
     qDebug() << "mysignal test!!" << value;
 }
 
+
+void Widget::Mybtn_clicked()
+{
+    qDebug() << "Mybtn_clicked test!!";
+}
