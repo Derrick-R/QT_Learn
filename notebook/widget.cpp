@@ -6,6 +6,7 @@ Widget::Widget(QWidget *parent):QWidget(parent), ui(new Ui::Widget)
 {
     ui->setupUi(this);
     this->setLayout(ui->verticalLayout);
+    //ui->textEdit->installEventFilter(this);//绑定事件过滤器
     ui->widgetBottom->setLayout(ui->horizontalLayout);
     //快捷键
     QShortcut *shortCutSave = new QShortcut(QKeySequence(tr("Ctrl+S", "File|Open")), this);
@@ -65,6 +66,14 @@ void Widget::closeEvent(QCloseEvent *event)
         break;
     default:
         break;
+    }
+}
+
+bool Widget::eventFilter(QObject *watched, QEvent *event)
+{
+    if(event->type() == QEvent::Wheel)
+    {
+        qDebug() << "wheel\n";
     }
 }
 

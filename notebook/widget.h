@@ -23,10 +23,9 @@ public:
     QFile file;
     Widget(QWidget *parent = nullptr);
     ~Widget();
-
 protected:
     void closeEvent(QCloseEvent *event) override;
-
+    bool eventFilter(QObject *watched, QEvent *event) override;
 private slots:
     void Mybtn_clicked();
     void btnOpen_clicked();
