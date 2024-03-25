@@ -21,14 +21,6 @@ Widget::Widget(QWidget *parent)
         updateTime();
     });
     timerDateTime->start(1000);
-    //将多文本中的控件加入List
-    for (int i=0; i < 10; i++) {
-        QString btnName = QString("pushButton_%1").arg(i);
-        QString lineEditName = QString("lineEdit_%1").arg(i);
-        QString checkBoxName = QString("checkBox_%1").arg(i);
-        buttons.push_back(ui->btnName);
-
-    }
     //绑定按键信号与槽
     connect(ui->pushButtonCloseandOpen, &QPushButton::clicked, this, &Widget::on_CloseandOpen);
     connect(ui->pushButtonSend, &QPushButton::clicked, this, &Widget::on_Send);
@@ -38,7 +30,6 @@ Widget::Widget(QWidget *parent)
     connect(ui->checkBoxHex, &QPushButton::clicked, this, &Widget::on_Hex);
     connect(ui->pushButtonHidePanel, &QPushButton::clicked, this, &Widget::on_HidePanel);
     connect(ui->pushButtonHideHistory, &QPushButton::clicked, this, &Widget::on_HideHistory);
-    connect(ui->pushButton_1, &QPushButton::clicked, this, &Widget::on_pushButton_1);
     //绑定combox自定义信号
     connect(ui->comboBoxCom, &MyComboBox::refresh, this, &Widget::refresh_Com);
     //绑定Serial准备接收信号
@@ -55,6 +46,18 @@ Widget::Widget(QWidget *parent)
     QList<QSerialPortInfo> serials = QSerialPortInfo::availablePorts();
     for(QSerialPortInfo serial : serials){
         ui->comboBoxCom->addItem(serial.portName());
+    }
+    //将多文本中的控件加入List
+    for (int i=1; i <= 10; i++) {
+        QString btnName = QString("pushButton_%1").arg(i);
+        QString lineEditName = QString("lineEdit_%1").arg(i);
+        QString checkBoxName = QString("checkBox_%1").arg(i);
+        QPushButton* btn = findChild<QPushButton *>(btnName);
+        QLineEdit *ledit = findChild<QLineEdit *>(lineEditName);
+        QCheckBox *ckbox = findChild<QCheckBox *>(checkBoxName);
+        btn->setProperty("ID", i);
+        buttons.append(btn);lineEdits.append(ledit);checkBoxs.append(ckbox);
+        connect(btn, &QPushButton::clicked, this, &Widget::on_pushButtonx);
     }
 }
 
@@ -324,10 +327,13 @@ void Widget::refresh_Com()
     ui->labelSendStatus->setText("Serial refresh!");
 }
 
-void Widget::on_pushButton_1()
+void Widget::on_pushButtonx()
 {
-    ui->lineEditSned->setText(ui->lineEdit_1->text());
+    int id = sender()->property("ID").toInt();
+    qDebug() << id;
+    ui->lineEditSned->setText(lineEdits[id-1]->text());
     on_Send();
 }
+
 
 

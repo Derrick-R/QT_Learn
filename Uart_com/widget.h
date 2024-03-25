@@ -50,7 +50,7 @@ private slots:
     void on_HidePanel(bool checked);
     void on_HideHistory(bool checked);
     void refresh_Com();
-    void on_pushButton_1();
+    void on_pushButtonx();
 
 };
 #endif // WIDGET_H
