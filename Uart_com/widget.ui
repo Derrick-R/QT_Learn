@@ -123,17 +123,17 @@
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_1">
            <item>
-            <widget class="QCheckBox" name="checkBox">
+            <widget class="QCheckBox" name="checkBox_1">
              <property name="text">
               <string/>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="lineEdit"/>
+            <widget class="QLineEdit" name="lineEdit_1"/>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton">
+            <widget class="QPushButton" name="pushButton_1">
              <property name="maximumSize">
               <size>
                <width>35</width>
@@ -495,7 +495,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="comboBoxCom">
+              <widget class="MyComboBox" name="comboBoxCom">
                <property name="minimumSize">
                 <size>
                  <width>90</width>
@@ -796,6 +796,70 @@
          <string/>
         </property>
         <layout class="QGridLayout" name="gridLayout_4">
+         <item row="1" column="3">
+          <widget class="QCheckBox" name="checkBoxAutoLine">
+           <property name="maximumSize">
+            <size>
+             <width>80</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>自动换行</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="5">
+          <widget class="QPushButton" name="pushButtonHideHistory">
+           <property name="maximumSize">
+            <size>
+             <width>80</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>隐藏历史</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QCheckBox" name="checkBoxRevTime">
+           <property name="minimumSize">
+            <size>
+             <width>90</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>80</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>接收时间</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="5">
+          <widget class="QPushButton" name="pushButtonHidePanel">
+           <property name="maximumSize">
+            <size>
+             <width>80</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>隐藏面板</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
          <item row="0" column="0" rowspan="2">
           <widget class="QPushButton" name="pushButtonCloseandOpen">
            <property name="minimumSize">
@@ -828,14 +892,8 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="2">
-          <widget class="QCheckBox" name="checkBoxRevTime">
-           <property name="minimumSize">
-            <size>
-             <width>90</width>
-             <height>0</height>
-            </size>
-           </property>
+         <item row="1" column="1">
+          <widget class="QPushButton" name="pushButtonSaveRev">
            <property name="maximumSize">
             <size>
              <width>80</width>
@@ -843,7 +901,7 @@
             </size>
            </property>
            <property name="text">
-            <string>接收时间</string>
+            <string>保存接收</string>
            </property>
           </widget>
          </item>
@@ -861,82 +919,36 @@
           </widget>
          </item>
          <item row="0" column="4">
-          <widget class="QPushButton" name="pushButtonRunMode">
-           <property name="maximumSize">
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
             <size>
-             <width>80</width>
-             <height>16777215</height>
+             <width>100</width>
+             <height>20</height>
             </size>
            </property>
-           <property name="text">
-            <string>运行模式</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="5">
-          <widget class="QPushButton" name="pushButtonHidePanel">
-           <property name="maximumSize">
-            <size>
-             <width>80</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>隐藏面板</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QPushButton" name="pushButtonSaveRev">
-           <property name="maximumSize">
-            <size>
-             <width>80</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>保存接收</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="3">
-          <widget class="QCheckBox" name="checkBoxAutoLine">
-           <property name="maximumSize">
-            <size>
-             <width>80</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>自动换行</string>
-           </property>
-          </widget>
+          </spacer>
          </item>
          <item row="1" column="4">
-          <widget class="QPushButton" name="pushButtonDownloadMode">
-           <property name="maximumSize">
+          <spacer name="horizontalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
             <size>
-             <width>80</width>
-             <height>16777215</height>
+             <width>100</width>
+             <height>20</height>
             </size>
            </property>
-           <property name="text">
-            <string>下载模式</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="5">
-          <widget class="QPushButton" name="pushButtonHideHistory">
-           <property name="maximumSize">
-            <size>
-             <width>80</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>隐藏历史</string>
-           </property>
-          </widget>
+          </spacer>
          </item>
         </layout>
        </widget>
@@ -1067,6 +1079,13 @@
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MyComboBox</class>
+   <extends>QComboBox</extends>
+   <header location="global">mycombobox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="res.qrc"/>
  </resources>

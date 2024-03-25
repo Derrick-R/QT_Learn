@@ -10,6 +10,8 @@
 #include <QFileDialog>
 #include <QFile>
 #include <QDateTime>
+#include <QLineEdit>
+#include "mycombobox.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
 QT_END_NAMESPACE
@@ -32,6 +34,11 @@ private:
     QTimer *timer;
     QString myTime;
 
+    int buttonIndex;
+    QList<QPushButton *> buttons;
+    QList<QLineEdit *> lineEdits;
+    QList<QCheckBox *> checkBoxs;
+
 private slots:
     void on_CloseandOpen();
     void on_Send();
@@ -40,6 +47,10 @@ private slots:
     void on_TimingSend(bool checked);
     void on_SaveRev();
     void on_Hex(bool checked);
+    void on_HidePanel(bool checked);
+    void on_HideHistory(bool checked);
+    void refresh_Com();
+    void on_pushButton_1();
 
 };
 #endif // WIDGET_H

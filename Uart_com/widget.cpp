@@ -1,6 +1,5 @@
 #include "widget.h"
 #include "ui_widget.h"
-
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Widget)
@@ -22,6 +21,14 @@ Widget::Widget(QWidget *parent)
         updateTime();
     });
     timerDateTime->start(1000);
+    //将多文本中的控件加入List
+    for (int i=0; i < 10; i++) {
+        QString btnName = QString("pushButton_%1").arg(i);
+        QString lineEditName = QString("lineEdit_%1").arg(i);
+        QString checkBoxName = QString("checkBox_%1").arg(i);
+        buttons.push_back(ui->btnName);
+
+    }
     //绑定按键信号与槽
     connect(ui->pushButtonCloseandOpen, &QPushButton::clicked, this, &Widget::on_CloseandOpen);
     connect(ui->pushButtonSend, &QPushButton::clicked, this, &Widget::on_Send);
@@ -29,6 +36,11 @@ Widget::Widget(QWidget *parent)
     connect(ui->checkBoxTimingSend, &QCheckBox::toggled, this, &Widget::on_TimingSend);
     connect(ui->pushButtonSaveRev, &QPushButton::clicked, this, &Widget::on_SaveRev);
     connect(ui->checkBoxHex, &QPushButton::clicked, this, &Widget::on_Hex);
+    connect(ui->pushButtonHidePanel, &QPushButton::clicked, this, &Widget::on_HidePanel);
+    connect(ui->pushButtonHideHistory, &QPushButton::clicked, this, &Widget::on_HideHistory);
+    connect(ui->pushButton_1, &QPushButton::clicked, this, &Widget::on_pushButton_1);
+    //绑定combox自定义信号
+    connect(ui->comboBoxCom, &MyComboBox::refresh, this, &Widget::refresh_Com);
     //绑定Serial准备接收信号
     connect(serialPort, &QSerialPort::readyRead, this, &Widget::Serial_Rev);
     //
@@ -279,4 +291,43 @@ void Widget::on_Hex(bool checked)
     cursor.movePosition(QTextCursor::End);            // 移动光标到文本末尾
     ui->revTextEdit->setTextCursor(cursor);              // 更新光标位置
 }
+
+void Widget::on_HidePanel(bool checked)
+{
+    if(checked){
+        ui->pushButtonHidePanel->setText("显示面板");
+        ui->groupBoxRecord->hide();
+    }else{
+        ui->pushButtonHidePanel->setText("隐藏面板");
+        ui->groupBoxRecord->show();
+    }
+}
+
+void Widget::on_HideHistory(bool checked)
+{
+    if(checked){
+        ui->pushButtonHideHistory->setText("显示历史");
+        ui->groupBoxTexts->hide();
+    }else{
+        ui->pushButtonHideHistory->setText("隐藏历史");
+        ui->groupBoxTexts->show();
+    }
+}
+//刷新串口号
+void Widget::refresh_Com()
+{
+    ui->comboBoxCom->clear();
+    QList<QSerialPortInfo> serials = QSerialPortInfo::availablePorts();
+    for(QSerialPortInfo serial : serials){
+        ui->comboBoxCom->addItem(serial.portName());
+    }
+    ui->labelSendStatus->setText("Serial refresh!");
+}
+
+void Widget::on_pushButton_1()
+{
+    ui->lineEditSned->setText(ui->lineEdit_1->text());
+    on_Send();
+}
+
 
