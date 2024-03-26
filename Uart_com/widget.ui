@@ -416,7 +416,11 @@
             </widget>
            </item>
            <item>
-            <widget class="QSpinBox" name="spinBoxLoopMs"/>
+            <widget class="QSpinBox" name="spinBoxLoopMs">
+             <property name="maximum">
+              <number>99999</number>
+             </property>
+            </widget>
            </item>
            <item>
             <widget class="QLabel" name="labelMs">

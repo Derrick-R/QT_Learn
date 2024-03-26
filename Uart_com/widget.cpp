@@ -10,6 +10,7 @@ Widget::Widget(QWidget *parent)
     serialPort = new QSerialPort(this);
     timer = new QTimer(this);
     QTimer *timerDateTime = new QTimer(this);
+    timeLoopSend = new QTimer(this);
     sendTotal = 0;
     recvTotal = 0;
     sendBack = "";
@@ -19,6 +20,9 @@ Widget::Widget(QWidget *parent)
     });
     connect(timerDateTime, &QTimer::timeout,[=](){
         updateTime();
+    });
+    connect(timeLoopSend, &QTimer::timeout,[=](){
+        LoopSend();
     });
     timerDateTime->start(1000);
     //绑定按键信号与槽
@@ -30,11 +34,17 @@ Widget::Widget(QWidget *parent)
     connect(ui->checkBoxHex, &QPushButton::clicked, this, &Widget::on_Hex);
     connect(ui->pushButtonHidePanel, &QPushButton::clicked, this, &Widget::on_HidePanel);
     connect(ui->pushButtonHideHistory, &QPushButton::clicked, this, &Widget::on_HideHistory);
+    connect(ui->checkBoxLoopSend, &QPushButton::clicked, this, &Widget::on_LoopSend);
+    connect(ui->pushButtonReset, &QPushButton::clicked, this, &Widget::on_Reset);
+    connect(ui->pushButtonSave, &QPushButton::clicked, this, &Widget::on_Save);
+    connect(ui->pushButtonLoad, &QPushButton::clicked, this, &Widget::on_Load);
     //绑定combox自定义信号
     connect(ui->comboBoxCom, &MyComboBox::refresh, this, &Widget::refresh_Com);
     //绑定Serial准备接收信号
     connect(serialPort, &QSerialPort::readyRead, this, &Widget::Serial_Rev);
     //
+    ui->checkBoxLoopSend->setEnabled(false);
+    ui->spinBoxLoopMs->setValue(1000);
     ui->comboBoxBaud->setCurrentIndex(6);
     ui->comboBoxDateBit->setCurrentIndex(3);
     ui->pushButtonSend->setEnabled(false);
@@ -81,6 +91,7 @@ void Widget::updateTime()
     ui->labelTime->setText(myTime);
 }
 
+
 void Widget::on_CloseandOpen()
 {
     if(!serialPort->isOpen()){
@@ -126,6 +137,7 @@ void Widget::on_CloseandOpen()
             ui->groupBox->setEnabled(false);
             ui->checkBoxHexsend->setEnabled(true);
             ui->checkBoxSendNewLine->setEnabled(true);
+            ui->checkBoxLoopSend->setEnabled(true);
         }else{
             QMessageBox serialOpenBox;
             const QString message = ui->comboBoxCom->currentText() + "打开失败";
@@ -135,7 +147,9 @@ void Widget::on_CloseandOpen()
         }
     }else{
         emit ui->checkBoxTimingSend->toggled(false);
+        emit ui->checkBoxLoopSend->clicked(false);
         ui->checkBoxTimingSend->setCheckState(Qt::Unchecked);
+        ui->checkBoxLoopSend->setCheckState(Qt::Unchecked);
         serialPort->close();
         ui->pushButtonCloseandOpen->setText("打开串口");
         ui->pushButtonSend->setEnabled(false);
@@ -144,6 +158,7 @@ void Widget::on_CloseandOpen()
         ui->labelSendStatus->setText("Serial Close!");
         ui->checkBoxHexsend->setEnabled(false);
         ui->checkBoxSendNewLine->setEnabled(false);
+        ui->checkBoxLoopSend->setEnabled(false);
     }
 
 }
@@ -201,9 +216,9 @@ void Widget::on_Send()
 void Widget::Serial_Rev()
 {
     QString recv =  serialPort->readAll();
+    //自动换行
     if(recv != NULL)
     {
-        //自动换行
         if(ui->checkBoxAutoLine->isChecked()){
             recv += "\r\n";
         }
@@ -229,6 +244,7 @@ void Widget::Serial_Rev()
             }else
                 ui->revTextEdit->insertPlainText(recv);
     }
+    ui->revTextEdit->moveCursor(QTextCursor::End);
 
 }
 
@@ -259,7 +275,6 @@ void Widget::on_SaveRev()
 {
     QFile file;
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), "./untitled.txt", tr("Text (*.txt *.doc *.docx)"));
-    this->setWindowTitle(fileName);//设置窗体显示文件名
     file.setFileName(fileName);
     file.open(QFile::ReadWrite | QFile::Text);
     QTextStream out(&file);
@@ -330,10 +345,79 @@ void Widget::refresh_Com()
 void Widget::on_pushButtonx()
 {
     int id = sender()->property("ID").toInt();
-    qDebug() << id;
     ui->lineEditSned->setText(lineEdits[id-1]->text());
+    ui->checkBoxHexsend->setCheckState(checkBoxs[id-1]->checkState());
     on_Send();
 }
 
+
+void Widget::on_Reset()
+{
+    QMessageBox resetBox;
+    resetBox.setWindowTitle("提示");
+    resetBox.setText("重置操作不可逆，确认是否重置？");
+    resetBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    resetBox.setButtonText(QMessageBox::Yes, "是");
+    resetBox.setButtonText(QMessageBox::No, "否");
+    resetBox.setIcon(QMessageBox::Question);
+    int ret = resetBox.exec();
+    if(ret == QMessageBox::Yes){
+        for (int i = 0; i < 10; i++) {
+            lineEdits[i]->clear();
+            checkBoxs[i]->setCheckState(Qt::Unchecked);
+        }
+    }else{
+        return;
+    }
+}
+
+void Widget::on_Save()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), "D:/QT/untitled.txt", tr("Text (*.txt *.doc *.docx)"));
+    QFile file(fileName);
+    file.open(QFile::ReadWrite | QFile::Text);
+    QTextStream out(&file);
+    out.setCodec("UTF-8");
+    //写入文件
+    for(int i = 0; i < 10; i++){
+        out << checkBoxs[i]->isChecked() << "," << lineEdits[i]->text() << "\n";
+    }
+    file.close();
+}
+
+void Widget::on_Load()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "D:/QT", tr("Text (*.txt *.doc *.docx)"));
+    QFile file(fileName);
+    file.open(QFile::ReadOnly | QFile::Text);
+    QTextStream in(&file);
+    in.setCodec("UTF-8");
+    for (int i = 0; i < 10; i++) {
+        QString str = in.readLine();
+        checkBoxs[i]->setChecked(bool(str.split(",")[0].toInt()));
+        lineEdits[i]->setText(str.split(",")[1]);
+    }
+
+}
+//定时器方式循环发送
+void Widget::on_LoopSend(bool checked)
+{
+    if(checked){
+        timeLoopSend->start(ui->spinBoxLoopMs->text().toInt());
+    }else {
+        timeLoopSend->stop();
+    }
+}
+void Widget::LoopSend()
+{
+    static int i=0;
+    if(i >= 10)i=0;
+    while(lineEdits[i]->text().isEmpty())
+    {
+        i++;
+        if(i >= 10)i=0;
+    }
+    emit buttons[i++]->clicked();
+}
 
 

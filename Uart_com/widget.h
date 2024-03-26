@@ -24,6 +24,7 @@ public:
     Widget(QWidget *parent = nullptr);
     ~Widget();
     void updateTime();
+    void LoopSend();
 
 private:
     Ui::Widget *ui;
@@ -32,6 +33,7 @@ private:
     unsigned long long recvTotal;
     QString sendBack;
     QTimer *timer;
+    QTimer *timeLoopSend;
     QString myTime;
 
     int buttonIndex;
@@ -51,6 +53,10 @@ private slots:
     void on_HideHistory(bool checked);
     void refresh_Com();
     void on_pushButtonx();
+    void on_LoopSend(bool checked);
+    void on_Reset();
+    void on_Save();
+    void on_Load();
 
 };
 #endif // WIDGET_H
