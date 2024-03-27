@@ -89,7 +89,7 @@
        <widget class="QLabel" name="labelIPAddress">
         <property name="maximumSize">
          <size>
-          <width>50</width>
+          <width>80</width>
           <height>16777215</height>
          </size>
         </property>
@@ -152,13 +152,19 @@
       </item>
       <item>
        <widget class="QLabel" name="labelDesAddress">
+        <property name="maximumSize">
+         <size>
+          <width>80</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="text">
          <string>目的地址</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEditDesAddress"/>
+       <widget class="MyComboBox" name="comboBoxDesAdddress"/>
       </item>
      </layout>
     </item>
@@ -194,6 +200,13 @@
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MyComboBox</class>
+   <extends>QComboBox</extends>
+   <header location="global">mycombobox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
