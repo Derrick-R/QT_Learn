@@ -26,4 +26,11 @@ csb\stm32f1xx_it.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash.h
 csb\stm32f1xx_it.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h
 csb\stm32f1xx_it.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i2c.h
 csb\stm32f1xx_it.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h
+csb\stm32f1xx_it.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h
+csb\stm32f1xx_it.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h
 csb\stm32f1xx_it.o: ../Inc/stm32f1xx_it.h
+csb\stm32f1xx_it.o: ..\bsp\ds1302.h
+csb\stm32f1xx_it.o: D:\software\MDK\ARM\ARMCC\Bin\..\include\stdio.h
+csb\stm32f1xx_it.o: D:\software\MDK\ARM\ARMCC\Bin\..\include\stdlib.h
+csb\stm32f1xx_it.o: ..\bsp\bsp_led_bee.h
+csb\stm32f1xx_it.o: ..\bsp\at24c02.h

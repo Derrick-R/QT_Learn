@@ -20,6 +20,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "i2c.h"
+#include "tim.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -35,10 +36,21 @@
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
 extern I2C_HandleTypeDef hi2c2;
+uint8_t last_alarm_time[8];
+char date[20];
+char time[20];
 double flow_speed = 0;
 double flow=0;
-double flow_limit=80;
+double flow_limit=40;
+int key1=0;
+int key2=0;
+int key3=0;
+int key4=0;
+char home=1;
+char csb=0;
+float distance;
 char tmp[50];
+unsigned char a=0;
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -97,12 +109,18 @@ int main(void)
   MX_GPIO_Init();
   MX_I2C1_Init();
   MX_I2C2_Init();
+  MX_TIM1_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
+	HAL_TIM_Base_Start_IT(&htim1);
+	HAL_TIM_Base_Start_IT(&htim2);
 	AT24_Init(hi2c2);
+	ds1302_init(0);
 	flow_speed = 3.5;
 	IIC_GPIO_Config();
 	OLED_Init();
 	OLED_Clear();
+	
 	OLED_ShowCHinese(0,0,0);
 	OLED_ShowCHinese(16,0,1);
 	OLED_ShowChar(32,0,':', 16);
@@ -124,11 +142,12 @@ int main(void)
 	sprintf(tmp, "%.0fm^3", flow_limit);
 	OLED_ShowString(48, 4, tmp, 16);
 	
-		OLED_ShowCHinese(0,6,5);
+	OLED_ShowCHinese(0,6,5);
 	OLED_ShowCHinese(16,6,6);
 	OLED_ShowChar(32,6,':', 16);
-	OLED_ShowString(48, 6, "24-12-12", 8);
-	OLED_ShowString(56, 7, "23:59", 8);
+	ds1302_read();
+	OLED_ShowString(48, 6, date, 8);
+	OLED_ShowString(56, 7, time, 8);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -138,13 +157,96 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
-		HAL_Delay(500);
-		flow += flow_speed*0.05;
-		sprintf(tmp, "%.2fm^3", flow);
-		
-		
-		
+		//getDistance();
+		flow_speed = distance;
+		//
+		if(flow >= flow_limit)
+		{
+			LED_ON();
+			Buzzer_ON();
+			alarm_time_recording();
+		}
+		else 
+		{
+			LED_OFF();
+			Buzzer_OFF();
+		}
+
+		if(key1){
+			OLED_Clear();
+			home++;
+				if(home ==4)home=1;
+			key1=0;
+			key2=0;
+			key3=0;
+			key4=0;
+		}
+		if(home == 1)
+		{
+			OLED_ShowCHinese(0,0,0);
+			OLED_ShowCHinese(16,0,1);
+			OLED_ShowChar(32,0,':', 16);
+			memset(tmp, 0, sizeof(tmp));
+			sprintf(tmp, "%06.3fm/s", flow_speed);
+			OLED_ShowString(48, 0, tmp, 16);
+			
+			OLED_ShowCHinese(0,2,0);
+			OLED_ShowCHinese(16,2,2);
+			OLED_ShowChar(32,2,':', 16);
+			memset(tmp, 0, sizeof(tmp));
+			sprintf(tmp, "%.3fm^3", flow);
+			OLED_ShowString(48, 2, tmp, 16);
+			
+			OLED_ShowCHinese(0,4,3);
+			OLED_ShowCHinese(16,4,4);
+			OLED_ShowChar(32,4,':', 16);
+			memset(tmp, 0, sizeof(tmp));
+			sprintf(tmp, "%.0fm^3", flow_limit);
+			OLED_ShowString(48, 4, tmp, 16);
+			
+			OLED_ShowCHinese(0,6,5);
+			OLED_ShowCHinese(16,6,6);
+			OLED_ShowChar(32,6,':', 16);
+			ds1302_read();
+			OLED_ShowString(48, 6, date, 8);
+			OLED_ShowString(56, 7, time, 8);
+			if(key4 && home == 1){
+				key4=0;
+				flow=0;
+		}
+		}
+		else if(home == 2)
+		{
+			OLED_ShowCHinese(0,0,3);
+			OLED_ShowCHinese(16,0,4);
+			OLED_ShowCHinese(32,0,7);
+			OLED_ShowCHinese(48,0,8);
+			OLED_ShowCHinese(0,2,3);
+			OLED_ShowCHinese(16,2,4);
+			OLED_ShowChar(32,2,':', 16);
+			memset(tmp, 0, sizeof(tmp));
+			sprintf(tmp, "%.0fm^3", flow_limit);
+			OLED_ShowString(48, 2, tmp, 16);
+			OLED_ShowString(0,4,"KEY1", 16);
+			OLED_ShowCHinese(32,4,9);
+			OLED_ShowCHinese(45,4,10);
+			OLED_ShowString(0,6,"KEY2++ KEY3--", 16);
+			
+			
+			if(key2 && flow_limit<=999){
+				flow_limit++;
+				key2 = 0;
+			}
+			else if(key3 && flow_limit>=5)
+			{
+				flow_limit--;
+				key3=0;
+			}
+		}
+		else if(home == 3)
+		{
+			display_last_alrm();
+		}
   }
   /* USER CODE END 3 */
 }

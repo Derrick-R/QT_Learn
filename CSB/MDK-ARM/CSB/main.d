@@ -26,7 +26,10 @@ csb\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash.h
 csb\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h
 csb\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i2c.h
 csb\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h
+csb\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h
+csb\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h
 csb\main.o: ../Inc/i2c.h
+csb\main.o: ../Inc/tim.h
 csb\main.o: ../Inc/gpio.h
 csb\main.o: ..\bsp\bsp_oled.h
 csb\main.o: ..\bsp\iic_mn.h

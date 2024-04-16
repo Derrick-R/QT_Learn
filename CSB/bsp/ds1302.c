@@ -1,7 +1,7 @@
 #include "ds1302.h"
 
 //日期和 时间 定义 		  年 月 日 时 分 秒 周
-uint8_t ds1302_time[8] = {22,4,19,14,22,00,0X02};
+uint8_t ds1302_time[8] = {24,4,9,10,01,00,0X02};
 
 /******************************************************************
 描述: DS1302 DAT设置成输入模式 函数
@@ -168,22 +168,23 @@ void dec_to_bcd(uint8_t *dec,uint8_t times)
 /******************************************************************
 描述: DS1302 初始化 日期和时间 函数
 *******************************************************************/
-void ds1302_init(void)
+void ds1302_init(char time_set)
 {
 	ds1302_config();	//引脚配置
+	if(time_set){
+		dec_to_bcd(ds1302_time,7);	//十进制转BCD码
+		ds1302_write_cmd(DS1302_WRITE_PROTECT,0x00); //关闭写保护	
+		
+		ds1302_write_cmd(DS1302_WRITE_YEAR,	ds1302_time[0]);	//年
+		ds1302_write_cmd(DS1302_WRITE_MONTH,ds1302_time[1]);	//月
+		ds1302_write_cmd(DS1302_WRITE_DAY,	ds1302_time[2]);  	//日
+		ds1302_write_cmd(DS1302_WRITE_HOUR,	ds1302_time[3]);   	//时
+		ds1302_write_cmd(DS1302_WRITE_MINUTE,ds1302_time[4]); 	//分
+		ds1302_write_cmd(DS1302_WRITE_SECOND,ds1302_time[5]);  	//秒
+		ds1302_write_cmd(DS1302_WRITE_WEEK,	ds1302_time[6]);  	//周	
 
-	dec_to_bcd(ds1302_time,7);	//十进制转BCD码
-	ds1302_write_cmd(DS1302_WRITE_PROTECT,0x00); //关闭写保护	
-	
-	ds1302_write_cmd(DS1302_WRITE_YEAR,	ds1302_time[0]);	//年
-	ds1302_write_cmd(DS1302_WRITE_MONTH,ds1302_time[1]);	//月
-	ds1302_write_cmd(DS1302_WRITE_DAY,	ds1302_time[2]);  	//日
-	ds1302_write_cmd(DS1302_WRITE_HOUR,	ds1302_time[3]);   	//时
-	ds1302_write_cmd(DS1302_WRITE_MINUTE,ds1302_time[4]); 	//分
-	ds1302_write_cmd(DS1302_WRITE_SECOND,ds1302_time[5]);  	//秒
-	ds1302_write_cmd(DS1302_WRITE_WEEK,	ds1302_time[6]);  	//周	
-
-	ds1302_write_cmd(DS1302_WRITE_PROTECT,0x80); //开启写保护	
+		ds1302_write_cmd(DS1302_WRITE_PROTECT,0x80); //开启写保护	
+	}
 }
 
 /******************************************************************

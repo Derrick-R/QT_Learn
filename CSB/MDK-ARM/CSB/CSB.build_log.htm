@@ -22,35 +22,83 @@ Dialog DLL:      TCM.DLL V1.48.0.0
  
 <h2>Project:</h2>
 C:\Users\11989\Desktop\stm32\CSB\MDK-ARM\CSB.uvprojx
-Project File Date:  04/08/2024
+Project File Date:  04/15/2024
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'D:\software\MDK\ARM\ARMCC\Bin'
 Build target 'CSB'
+compiling bsp_led_bee.c...
+..\bsp\at24c02.h(16): warning:  #1-D: last line of file ends without a newline
+  #endif/*__AT24C02_H__*/
+..\bsp\bsp_led_bee.h(20): warning:  #1295-D: Deprecated declaration LED_ON - give arg types
+  void LED_ON();
+..\bsp\bsp_led_bee.h(21): warning:  #1295-D: Deprecated declaration LED_OFF - give arg types
+  void LED_OFF();
+..\bsp\bsp_led_bee.h(22): warning:  #1295-D: Deprecated declaration Buzzer_ON - give arg types
+  void Buzzer_ON();
+..\bsp\bsp_led_bee.h(23): warning:  #1295-D: Deprecated declaration Buzzer_OFF - give arg types
+  void Buzzer_OFF();
+..\bsp\bsp_led_bee.h(24): warning:  #1295-D: Deprecated declaration alarm_time_recording - give arg types
+  void alarm_time_recording();
+..\bsp\bsp_led_bee.h(25): warning:  #1295-D: Deprecated declaration last_alarm_time_read - give arg types
+  void last_alarm_time_read();
+..\bsp\bsp_led_bee.h(26): warning:  #1295-D: Deprecated declaration display_last_alrm - give arg types
+  void display_last_alrm();
+..\bsp\bsp_led_bee.c(69): warning:  #223-D: function "memset" declared implicitly
+  	memset(tmp, 0, sizeof(tmp));
+..\bsp\bsp_led_bee.c(71): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "uint8_t *"
+  	OLED_ShowString(16, 4, tmp, 8);
+..\bsp\bsp_led_bee.c(74): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "uint8_t *"
+  	OLED_ShowString(24, 5, tmp, 8);
+..\bsp\bsp_led_bee.c(117): warning:  #1-D: last line of file ends without a newline
+                          
+..\bsp\bsp_led_bee.c: 12 warnings, 0 errors
 compiling main.c...
 ..\bsp\at24c02.h(16): warning:  #1-D: last line of file ends without a newline
   #endif/*__AT24C02_H__*/
-..\bsp\bsp_led_bee.h(5): warning:  #1295-D: Deprecated declaration Led_ON - give arg types
-  void Led_ON();
-..\bsp\bsp_led_bee.h(6): warning:  #1295-D: Deprecated declaration Led_OFF - give arg types
-  void Led_OFF();
-..\bsp\bsp_led_bee.h(7): warning:  #1295-D: Deprecated declaration Buzzer_ON - give arg types
+..\bsp\bsp_led_bee.h(20): warning:  #1295-D: Deprecated declaration LED_ON - give arg types
+  void LED_ON();
+..\bsp\bsp_led_bee.h(21): warning:  #1295-D: Deprecated declaration LED_OFF - give arg types
+  void LED_OFF();
+..\bsp\bsp_led_bee.h(22): warning:  #1295-D: Deprecated declaration Buzzer_ON - give arg types
   void Buzzer_ON();
-..\bsp\bsp_led_bee.h(8): warning:  #1295-D: Deprecated declaration Buzzer_OFF - give arg types
+..\bsp\bsp_led_bee.h(23): warning:  #1295-D: Deprecated declaration Buzzer_OFF - give arg types
   void Buzzer_OFF();
-../Src/main.c(109): warning:  #223-D: function "memset" declared implicitly
+..\bsp\bsp_led_bee.h(24): warning:  #1295-D: Deprecated declaration alarm_time_recording - give arg types
+  void alarm_time_recording();
+..\bsp\bsp_led_bee.h(25): warning:  #1295-D: Deprecated declaration last_alarm_time_read - give arg types
+  void last_alarm_time_read();
+..\bsp\bsp_led_bee.h(26): warning:  #1295-D: Deprecated declaration display_last_alrm - give arg types
+  void display_last_alrm();
+../Src/main.c(127): warning:  #223-D: function "memset" declared implicitly
   	memset(tmp, 0, sizeof(tmp));
-../Src/main.c(111): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "uint8_t *"
+../Src/main.c(129): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "uint8_t *"
   	OLED_ShowString(48, 0, tmp, 16);
-../Src/main.c(118): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "uint8_t *"
+../Src/main.c(136): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "uint8_t *"
   	OLED_ShowString(48, 2, tmp, 16);
-../Src/main.c(125): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "uint8_t *"
+../Src/main.c(143): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "uint8_t *"
   	OLED_ShowString(48, 4, tmp, 16);
-../Src/main.c: 9 warnings, 0 errors
+../Src/main.c(149): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "uint8_t *"
+  	OLED_ShowString(48, 6, date, 8);
+../Src/main.c(150): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "uint8_t *"
+  	OLED_ShowString(56, 7, time, 8);
+../Src/main.c(191): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "uint8_t *"
+  			OLED_ShowString(48, 0, tmp, 16);
+../Src/main.c(198): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "uint8_t *"
+  			OLED_ShowString(48, 2, tmp, 16);
+../Src/main.c(205): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "uint8_t *"
+  			OLED_ShowString(48, 4, tmp, 16);
+../Src/main.c(211): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "uint8_t *"
+  			OLED_ShowString(48, 6, date, 8);
+../Src/main.c(212): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "uint8_t *"
+  			OLED_ShowString(56, 7, time, 8);
+../Src/main.c(229): warning:  #167-D: argument of type "char *" is incompatible with parameter of type "uint8_t *"
+  			OLED_ShowString(48, 2, tmp, 16);
+../Src/main.c: 20 warnings, 0 errors
 linking...
-Program Size: Code=10280 RO-data=2384 RW-data=488 ZI-data=1328  
+Program Size: Code=15016 RO-data=2384 RW-data=1060 ZI-data=1516  
 FromELF: creating hex file...
-"CSB\CSB.axf" - 0 Error(s), 9 Warning(s).
+"CSB\CSB.axf" - 0 Error(s), 32 Warning(s).
 
 <h2>Software Packages used:</h2>
 

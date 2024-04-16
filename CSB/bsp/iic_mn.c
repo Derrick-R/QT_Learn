@@ -16,7 +16,7 @@ void IIC_GPIO_Config()
 }
 void delay()
 {
-	int i=100;
+	int i=0;
 	while(i--)
 	{
 		

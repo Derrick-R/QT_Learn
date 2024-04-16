@@ -3,6 +3,7 @@
 "csb\main.o"
 "csb\gpio.o"
 "csb\i2c.o"
+"csb\tim.o"
 "csb\stm32f1xx_it.o"
 "csb\stm32f1xx_hal_msp.o"
 "csb\stm32f1xx_hal_gpio_ex.o"

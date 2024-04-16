@@ -53,8 +53,8 @@ uint8_t ds1302_read_byte(void);							//DS1302 读一字节 函数
 uint8_t ds1302_read_data(uint8_t addr);					//DS1302 写一字节 函数
 void bcd_to_dec(uint8_t *bcd,uint8_t times);			//BCD 转 十进制 函数
 void dec_to_bcd(uint8_t *dec,uint8_t times);			//十进制 转 BCD 函数
-void ds1302_init(void);									//DS1302 初始化日期和时间 函数
-void ds1302_read(void);									//DS1302 读取  日期和时间 函数
+void ds1302_init(char time_set);									//DS1302 初始化日期和时间 函数
+void ds1302_read(void);														//DS1302 读取  日期和时间 函数
 
 #endif
 
