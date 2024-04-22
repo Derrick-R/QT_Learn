@@ -14,6 +14,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include "dayh.h"
+#include <QPainter>
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
 QT_END_NAMESPACE
@@ -44,12 +45,15 @@ private:
     void parseWeatherJsonData(QByteArray rawData);
     void parseWeatherJsonDataNew(QByteArray rawData);
     void updateUI();
+    void drawTempLineHigh();
+    void drawTempLineLow();
 public slots:
      void httpReply(QNetworkReply *reply);
      void search_On();
 protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
+    bool eventFilter(QObject *watched, QEvent *event);
 
 };
 #endif // WIDGET_H

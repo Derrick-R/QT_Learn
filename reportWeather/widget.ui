@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>565</width>
+    <width>464</width>
     <height>869</height>
    </rect>
   </property>
@@ -142,7 +142,7 @@
           <widget class="QLabel" name="labelTmp">
            <property name="font">
             <font>
-             <pointsize>26</pointsize>
+             <pointsize>27</pointsize>
              <weight>75</weight>
              <bold>true</bold>
             </font>
@@ -160,6 +160,11 @@
          </item>
          <item row="0" column="2">
           <widget class="QLabel" name="labelCity">
+           <property name="font">
+            <font>
+             <pointsize>13</pointsize>
+            </font>
+           </property>
            <property name="styleSheet">
             <string notr="true">color: rgb(255, 255, 255);</string>
            </property>
@@ -173,6 +178,11 @@
          </item>
          <item row="1" column="0">
           <widget class="QLabel" name="labelWeatherType">
+           <property name="font">
+            <font>
+             <pointsize>9</pointsize>
+            </font>
+           </property>
            <property name="styleSheet">
             <string notr="true">color: rgb(255, 255, 255);</string>
            </property>
@@ -183,6 +193,11 @@
          </item>
          <item row="1" column="1">
           <widget class="QLabel" name="labelTmpRange">
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+            </font>
+           </property>
            <property name="styleSheet">
             <string notr="true">color: rgb(255, 255, 255);</string>
            </property>
@@ -285,6 +300,11 @@ border-radius:20px
               </property>
               <item>
                <widget class="QLabel" name="labelWind">
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
                 <property name="styleSheet">
                  <string notr="true">color: rgb(255, 255, 255);</string>
                 </property>
@@ -298,6 +318,11 @@ border-radius:20px
               </item>
               <item>
                <widget class="QLabel" name="labelWindLevel">
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
                 <property name="layoutDirection">
                  <enum>Qt::LeftToRight</enum>
                 </property>
@@ -347,6 +372,11 @@ border-radius:20px
               </property>
               <item>
                <widget class="QLabel" name="labelPM">
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
                 <property name="styleSheet">
                  <string notr="true">color: rgb(255, 255, 255);</string>
                 </property>
@@ -360,6 +390,11 @@ border-radius:20px
               </item>
               <item>
                <widget class="QLabel" name="labelPMLevel">
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
                 <property name="layoutDirection">
                  <enum>Qt::LeftToRight</enum>
                 </property>
@@ -412,6 +447,11 @@ border-radius:20px
               </property>
               <item>
                <widget class="QLabel" name="labelHumidity">
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
                 <property name="styleSheet">
                  <string notr="true">color: rgb(255, 255, 255);</string>
                 </property>
@@ -425,6 +465,11 @@ border-radius:20px
               </item>
               <item>
                <widget class="QLabel" name="labelHumidityLevel">
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
                 <property name="layoutDirection">
                  <enum>Qt::LeftToRight</enum>
                 </property>
@@ -474,6 +519,11 @@ border-radius:20px
               </property>
               <item>
                <widget class="QLabel" name="labelAirQuality">
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
                 <property name="styleSheet">
                  <string notr="true">color: rgb(255, 255, 255);</string>
                 </property>
@@ -487,6 +537,11 @@ border-radius:20px
               </item>
               <item>
                <widget class="QLabel" name="labelAirQualityLevel">
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
                 <property name="layoutDirection">
                  <enum>Qt::LeftToRight</enum>
                 </property>
@@ -594,6 +649,9 @@ border-bottom-right-radius:0px</string>
                 </property>
                 <property name="pixmap">
                  <pixmap resource="icon.qrc">:/res/type/DuoYun.png</pixmap>
+                </property>
+                <property name="scaledContents">
+                 <bool>false</bool>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>

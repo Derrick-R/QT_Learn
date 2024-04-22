@@ -14,8 +14,8 @@ Widget::Widget(QWidget *parent)
     ui->setupUi(this);
     this->setLayout(ui->verticalLayoutMain);
     setWindowFlag(Qt::FramelessWindowHint);
-    connect(ui->pushButton, &QPushButton::clicked, this, &Widget::search_On);
-
+    connect(ui->pushButton, &QPushButton::clicked, this, &Widget::search_On);//点击搜索按钮触发槽函数
+    connect(ui->lineEdit, &QLineEdit::returnPressed, this, &Widget::search_On);//回车触发槽函数
     menu = new QMenu(this);
     menu->setStyleSheet("QMenu { color: white; }");
     QAction *closeAct = new QAction(QIcon(":/res/close.png"), tr("退出"), this);
@@ -88,6 +88,9 @@ Widget::Widget(QWidget *parent)
     mTypeMap.insert("中到大雨",":/res/type/ZhongDaoDaYu.png");
     mTypeMap.insert("中雪",":/res/type/ZhongXue.png");
     mTypeMap.insert("中雨",":/res/type/ZhongYu.png");
+
+    ui->widget0402->installEventFilter(this);
+    ui->widget0403->installEventFilter(this);
 }
 
 Widget::~Widget()
@@ -127,7 +130,6 @@ void Widget::parseWeatherJsonDataNew(QByteArray rawData)
             QJsonArray weaArray = jsonRoot["data"].toArray();
             for(int i = 0; i < weaArray.size(); i++){
                 QJsonObject obj = weaArray[i].toObject();
-                //qDebug() << obj["date"].toString() << obj["wea"].toString();
                 days[i].mDate = obj["date"].toString();
                 days[i].mWeek = obj["week"].toString();
                 days[i].mWeathType = obj["wea"].toString();
@@ -223,13 +225,12 @@ void Widget::httpReply(QNetworkReply *reply)
     if (reply->error() == QNetworkReply::NoError) {
                 // 获取返回的数据
                 QByteArray responseData = reply->readAll();
-                qDebug() << QString::fromUtf8(responseData);
                 parseWeatherJsonDataNew(responseData);
             } else {
                 // 输出错误信息
                 QMessageBox msg;
                 msg.setWindowTitle("error");
-                msg.setText("网络请求失败");
+                msg.setText("网络请求失败 Code:"+QString::number(resCode));
                 msg.setIcon(QMessageBox::Warning);
                 msg.setStandardButtons(QMessageBox::Ok);
                 msg.exec();
@@ -242,20 +243,22 @@ QString getCityCodeFromJson(QString name){
     file.open(QIODevice::ReadOnly);
     QByteArray rawData = file.readAll();
     file.close();
-    qDebug() << rawData;
 
     QJsonDocument jsonDoc = QJsonDocument::fromJson(rawData);
     if(jsonDoc.isArray()){
         QJsonArray citys = jsonDoc.array();
         for(QJsonValue value : citys){
             if(value.isObject()){
-                if(name == value["city_name"].toString())
+                if(name == value["city_name"].toString() || name+"市" == value["city_name"].toString()
+                        || name+"区" == value["city_name"].toString() || name+"县" == value["city_name"].toString())
                     return value["city_code"].toString();
             }
         }
-        return NULL;
     }
+    return NULL;
 }
+
+
 void Widget::search_On()
 {
     QString cityName = ui->lineEdit->text();
@@ -263,9 +266,7 @@ void Widget::search_On()
     if(cityCode != NULL){
         QString url = "http://v1.yiketianqi.com/api?unescape=1&version=v9&appid=62959456&appsecret=zWWc5u2U&cityid=" + cityCode;
         // 发起GET请求，获取返回的QNetworkReply对象指针
-        qDebug() << url;
         manager->get(QNetworkRequest(QUrl(url)));
-        qDebug() << "on" << endl;
     }else{
         QMessageBox box;
         box.setWindowTitle("错误");
@@ -290,5 +291,68 @@ void Widget::mousePressEvent(QMouseEvent *event)
 void Widget::mouseMoveEvent(QMouseEvent *event)
 {
     this->move(event->globalPos() - mOffset);//鼠标移动改变event->globalPos(),页面跟着移动，但是减去相对位置保持鼠标和页面相对位置不变
+}
+
+
+void Widget::drawTempLineHigh(){
+    QPainter painter(ui->widget0402);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setBrush(Qt::yellow);
+    painter.setPen(Qt::yellow);
+    int avg=0, sum=0;
+    for (int i = 0; i < 6; i++) {
+        sum += days[i].mTempHigh.toInt();
+    }
+    avg = sum/6;
+    //定义6个点-温度
+    QVector<QPoint> points;
+    QPoint point;
+    for(int i = 0; i < 6; i++)
+    {
+        point.setX(mAirqList[i]->x()+mAirqList[i]->width()/2);//x轴在空气质量的正中间
+        point.setY(ui->widget0402->height()/2 - (days[i].mTempHigh.toInt() - avg)*3);//y轴根据温度平均值上下浮动
+        points.push_back(point);
+        if(i >0 && i <5)points.push_back(point);
+        painter.drawEllipse(point, 4,4);
+        painter.drawText(point.x()-10, point.y()-10, days[i].mTempHigh+"℃");
+
+    }
+    painter.drawLines(points);
+}
+
+void Widget::drawTempLineLow()
+{
+    QPainter painter(ui->widget0403);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setBrush(QColor(0,170,200));
+    painter.setPen(QColor(0,170,200));
+    int avg=0, sum=0;
+    for (int i = 0; i < 6; i++) {
+        sum += days[i].mTempLow.toInt();
+    }
+    avg = sum/6;
+    //定义6个点-温度
+    QVector<QPoint> points;
+    QPoint point;
+    for(int i = 0; i < 6; i++)
+    {
+        point.setX(mAirqList[i]->x()+mAirqList[i]->width()/2);//x轴在空气质量的正中间
+        point.setY(ui->widget0403->height()/2 - (days[i].mTempLow.toInt() - avg)*3);//y轴根据温度平均值上下浮动
+        points.push_back(point);
+        if(i >0 && i <5)points.push_back(point);
+        painter.drawEllipse(point, 4,4);
+        painter.drawText(point.x()-10, point.y()-10, days[i].mTempLow+"℃");
+
+    }
+    painter.drawLines(points);
+}
+bool Widget::eventFilter(QObject *watched, QEvent *event)
+{
+    if(watched == ui->widget0402 && event->type() == QEvent::Paint)
+    {
+        drawTempLineHigh();
+    }else if(watched == ui->widget0403 && event->type() == QEvent::Paint){
+        drawTempLineLow();
+    }
 }
 
